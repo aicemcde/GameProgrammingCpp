@@ -1,0 +1,37 @@
+{
+  "actions": {
+    "Move_Forward": [
+      {
+        "deviceType": 0,
+        "code": 26,
+        "playerIndex": 0
+      },
+      {
+        "deviceType": 0,
+        "code": 82,
+        "playerIndex": 0
+      }
+    ],
+    "Move_Back": [
+      {
+        "deviceType": 0,
+        "code": 22,
+        "playerIndex": 0
+      }
+    ],
+    "Perspective_Right": [
+      {
+        "deviceType": 0,
+        "code": 7,
+        "playerIndex": 0
+      }
+    ],
+    "Perspective_Left": [
+      {
+        "deviceType": 0,
+        "code": 4,
+        "playerIndex": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "window": {
+    "title": "My Game Engine",
+    "width": 1024,
+    "height": 768,
+    "fullScreen": false
+  },
+  "audio": {
+    "master_volume": 0.8,
+    "mute": false
+  }
+}
