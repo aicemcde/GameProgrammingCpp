@@ -49,6 +49,8 @@ private:
 	std::unique_ptr<class InputSystem> mInputSystem;
 
 	class CameraActor* mCameraActor;
+	class FPSActor* mFPSActor;
+
 	SoundEvent mMusicEvent;
 	SoundEvent mReverbSnap;
 

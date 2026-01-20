@@ -145,6 +145,7 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\CameraActor.cpp" />
     <ClCompile Include="src\CircleComponent.cpp" />
     <ClCompile Include="src\Component.cpp" />
+    <ClCompile Include="src\FPSActor.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\InputSystem.cpp" />
     <ClCompile Include="src\Log.cpp" />
@@ -165,6 +166,7 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FPSActor.h" />
     <ClInclude Include="src\Actor.h" />
     <ClInclude Include="src\AudioComponent.h" />
     <ClInclude Include="src\AudioSystem.h" />

@@ -17,6 +17,7 @@
 #include "MoveComponent.h"
 #include "Log.h"
 #include "InputSystem.h"
+#include "FPSActor.h"
 
 
 Game* Game::sInstance = nullptr;
@@ -26,6 +27,7 @@ Game::Game()
 	, mTicksCount(0)
 	, mScreenSize(1024.0f, 768.0f)
 	, mCameraActor(nullptr)
+	, mFPSActor(nullptr)
 {
 	if (sInstance == nullptr)
 	{
@@ -68,6 +70,7 @@ bool Game::Initialize(GameConfig& config)
 
 	mInputSystem = std::make_unique<InputSystem>(this);
 	mInputSystem->Initialize();
+	mInputSystem->SetRelativeMouseMode(true);
 
 	LoadData();
 
@@ -203,7 +206,7 @@ void Game::UpdateGame()
 	}
 
 	mScene->Update(deltaTime);
-	mAudioSystem->SetListener(mRenderer->GetView(), mCameraActor->GetPosition(), deltaTime);
+	mAudioSystem->SetListener(mRenderer->GetView(), mFPSActor->GetPosition(), deltaTime);
 	mAudioSystem->Update(deltaTime);
 	//ColorfulBG(deltaTime);
 }
@@ -276,7 +279,8 @@ void Game::LoadData()
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	//Camera
-	mCameraActor = mScene->CreateActor<CameraActor>(this);
+	//mCameraActor = mScene->CreateActor<CameraActor>(this);
+	mFPSActor = mScene->CreateActor<FPSActor>(this);
 
 	//UI
 	a = mScene->CreateActor<Actor>(this);

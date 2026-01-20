@@ -11,9 +11,12 @@ public:
 
 	float GetAngularSpeed() const noexcept { return mAngularSpeed; }
 	float GetForwardSpeed() const noexcept { return mForwardSpeed; }
+	float GetStrafeSpeed() const noexcept { return mStrafeSpeed; }
 	void SetAngularSpeed(float speed) noexcept { mAngularSpeed = speed; }
 	void SetForwardSpeed(float speed) noexcept { mForwardSpeed = speed; }
+	void SetStrafeSpeed(float speed) noexcept { mStrafeSpeed = speed; }
 private:
 	float mAngularSpeed;
 	float mForwardSpeed;
+	float mStrafeSpeed;
 };

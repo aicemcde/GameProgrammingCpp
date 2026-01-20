@@ -19,6 +19,20 @@
         "playerIndex": 0
       }
     ],
+    "Move_Right": [
+      {
+        "deviceType": 0,
+        "code": 7,
+        "playerIndex": 0
+      }
+    ],
+    "Move_Left": [
+      {
+        "deviceType": 0,
+        "code": 4,
+        "playerIndex": 0
+      }
+    ],
     "Perspective_Right": [
       {
         "deviceType": 0,

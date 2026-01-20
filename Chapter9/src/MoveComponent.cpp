@@ -6,6 +6,7 @@ MoveComponent::MoveComponent(Actor* owner, int updateOrder)
 	:Component(owner, updateOrder)
 	, mAngularSpeed(0.0f)
 	, mForwardSpeed(0.0f)
+	, mStrafeSpeed(0.0f)
 {
 
 }
@@ -20,10 +21,11 @@ void MoveComponent::Update(float deltaTime)
 		rot = Quaternion::Concatenate(rot, inc);
 		mOwner->SetRotation(rot);
 	}
-	if (!Math::NearZero(mForwardSpeed))
+	if (!Math::NearZero(mForwardSpeed) || !Math::NearZero(mStrafeSpeed))
 	{
 		Vector3 pos = mOwner->GetPosition();
 		pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
+		pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
 		mOwner->SetPosition(pos);
 	}
 }
