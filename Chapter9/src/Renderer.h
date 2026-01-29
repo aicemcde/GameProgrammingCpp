@@ -1,10 +1,12 @@
 #pragma once
-#include <string>
 #include <vector>
 #include <memory>
 #include "Math.h"
 #include <SDL.h>
-#include "Config.h"
+
+
+struct GameConfig;
+struct GameContext;
 
 struct DirectionalLight
 {
@@ -16,13 +18,15 @@ struct DirectionalLight
 class Renderer
 {
 public:
-	Renderer(class Game* game);
+	Renderer(GameContext* context);
 	~Renderer();
 
 	bool Initialize(GameConfig& config);
 	void Shutdown();
 	void UnloadData();
 	void Draw();
+
+	Vector3 UnProject(const Vector3& screenPoint) const;
 
 	void AddSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
@@ -35,12 +39,15 @@ public:
 	void SetAmbientLight(const Vector3& ambient) noexcept { mAmbientLight = ambient; }
 	DirectionalLight& GetDirectionalLight() noexcept { return mDirLight; }
 	Matrix4& GetView() noexcept { return mView; }
+	Vector2 GetScreenSize() const { return mScreenSize; }
+	Vector2 GetCornerScreenSize() const { return mScreenSize * 0.5f; }
+	void GetScreenDirection(Vector3& outstart, Vector3& outDir) const;
 private:
 	bool LoadShaders();
 	void CreateSpriteVerts();
 
 	SDL_Window* mWindow = nullptr;
-	SDL_GLContext mContext;
+	SDL_GLContext mGLContext;
 
 	std::vector<class SpriteComponent*> mSprites;
 	std::vector<class MeshComponent*> mMeshComps;
@@ -54,5 +61,6 @@ private:
 	Vector3 mAmbientLight;
 	DirectionalLight mDirLight;
 
-	class Game* mGame;
+	GameContext* mGameContext = nullptr;
+	Vector2 mScreenSize;
 };

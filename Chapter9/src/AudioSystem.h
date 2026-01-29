@@ -4,6 +4,8 @@
 #include "SoundEvent.h"
 #include "Math.h"
 
+struct GameContext;
+
 namespace FMOD
 {
 	class System;
@@ -20,7 +22,7 @@ namespace FMOD
 class AudioSystem
 {
 public:
-	AudioSystem(class Game* game);
+	AudioSystem(GameContext* context);
 	~AudioSystem();
 
 	bool Initialize();
@@ -44,7 +46,7 @@ private:
 	void UnloadBus(FMOD::Studio::Bank* bank);
 
 	static unsigned int sNextID;
-	class Game* mGame;
+	GameContext* mGameContext;
 	Vector3 mLastListenerPos;
 	Vector3 mLastListenerVelocity;
 	FMOD::Studio::System* mSystem;

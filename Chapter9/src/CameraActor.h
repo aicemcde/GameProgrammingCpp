@@ -2,10 +2,12 @@
 #include "Actor.h"
 #include "SoundEvent.h"
 
+struct GameContext;
+
 class CameraActor : public Actor
 {
 public:
-	explicit CameraActor(class Game* game);
+	CameraActor(GameContext* context);
 
 	void UpdateActor(float deltaTime) override;
 	void ActorInput(const InputState& state) override;

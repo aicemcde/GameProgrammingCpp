@@ -1,14 +1,10 @@
 #pragma once
 #include "Actor.h"
 
-inline constexpr auto MAX_MOUSE_SPEED = 500;
-inline constexpr auto MAX_MOVE_SPEED = 300.0f;
-inline constexpr auto MAX_ANGULAR_SPEED = 3.1415926535f * 8.0f;
-
 class FPSActor : public Actor
 {
 public:
-	FPSActor(class Game* game);
+	FPSActor(GameContext* context);
 	~FPSActor() = default;
 
 	void UpdateActor(float deltaTime) override;
@@ -16,4 +12,8 @@ public:
 private:
 	class MoveComponent* mMoveComp;
 	class AudioComponent* mAudioComp;
+	class FPSCamera* mFPSCamera;
+	class Actor* mFPSModel;
+	class MeshComponent* mMeshForFPSModel;
+	class SpriteComponent* mCrosshair;
 };

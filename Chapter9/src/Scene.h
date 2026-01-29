@@ -1,10 +1,10 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include <SDL.h>
 #include <concepts>
 #include "Actor.h"
 
+struct GameContext;
 
 class Scene
 {
@@ -13,7 +13,7 @@ public:
 	requires std::derived_from<T, class Actor>
 	T* CreateActor(Args&&... args)
 	{
-		auto newActor = std::make_unique<T>(std::forward<Args>(args)...);
+		auto newActor = std::make_unique<T>(mGameContext, std::forward<Args>(args)...);
 		T* ptr = newActor.get();
 		if (mUpdatingActors)
 		{
@@ -25,7 +25,7 @@ public:
 		}
 		return ptr;
 	}
-	Scene(class Game* game);
+	Scene(GameContext* context);
 
 	void Update(float deltaTime);
 	void Unload();
@@ -35,7 +35,7 @@ public:
 private:
 	std::vector<std::unique_ptr<class Actor>> mActors;
 	std::vector < std::unique_ptr<class Actor>> mPendingActors;
-	class Game* mGame;
+	GameContext* mGameContext;
 
 	bool mUpdatingActors;
 };

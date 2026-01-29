@@ -1,9 +1,9 @@
 ﻿#include "AudioComponent.h"
-#include "Game.h"
 #include "AudioSystem.h"
 #include "Actor.h"
-#include <algorithm>
 #include <cmath>
+#include "GameSystem.h"
+#include "SoundEvent.h"
 
 namespace
 {
@@ -89,9 +89,9 @@ void AudioComponent::OnUpdateWorldTransform(float deltaTime)
 	mLastPos = currentPos;
 }
 
-SoundEvent AudioComponent::PlayEvent(const std::string& name)
+SoundEvent AudioComponent::PlayEvent(const std::string& name, GameContext* context)
 {
-	SoundEvent e = Game::GetAudioSystemInstance()->PlayEvent(name);
+	SoundEvent e = context->audio->PlayEvent(name);
 	if (e.Is3D())
 	{
 		mEvent3D.emplace_back(e);

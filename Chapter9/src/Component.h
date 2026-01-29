@@ -1,6 +1,8 @@
 #pragma once
-#include <cstdint>
-#include "InputSystem.h"
+#include "Math.h"
+
+struct InputState;
+struct GameContext;
 
 class Component
 {

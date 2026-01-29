@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <fmod_errors.h>
 #include "Renderer.h"
+#include "GameSystem.h"
 
 const int MAX_PATH_LENGTH = 512;
 const float DIRECT_OCCLUSION = 0.0f;
@@ -40,8 +41,8 @@ namespace
 	}
 }
 
-AudioSystem::AudioSystem(Game* game)
-	:mGame(game)
+AudioSystem::AudioSystem(GameContext* context)
+	:mGameContext(context)
 	,mLastListenerPos(Vector3::Zero)
 	,mLastListenerVelocity(Vector3::Zero)
 {

@@ -5,16 +5,16 @@
 #include "Mesh.h"
 #include "VertexArray.h"
 #include <glew.h>
-#include <SDL.h>
-#include "Game.h"
 #include "Renderer.h"
+#include "GameSystem.h"
+#include "Log.h"
 
 MeshComponent::MeshComponent(Actor* owner)
 	:Component(owner)
 	, mMesh(nullptr)
 	, mTextureIndex(0)
 {
-	Game::GetRendererInstance()->AddMeshComp(this);
+	mOwner->GetRenderer()->AddMeshComp(this);
 }
 
 MeshComponent::~MeshComponent()
@@ -36,7 +36,7 @@ void MeshComponent::Draw(Shader* shader)
 		}
 		else
 		{
-			SDL_Log("MeshComponent : Texture does not get");
+			Log::Error("MeshComponent : Texture does not get");
 		}
 		VertexArray* va = mMesh->GetVertexArray();
 		SDL_assert(va != nullptr);
@@ -46,6 +46,6 @@ void MeshComponent::Draw(Shader* shader)
 	}
 	else
 	{
-		SDL_Log("Mesh could not draw");
+		Log::Error("Mesh could not draw");
 	}
 }

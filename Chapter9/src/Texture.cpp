@@ -1,9 +1,9 @@
 #include "Texture.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include <SDL.h>
 #include <glew.h>
 #include <SDL_ttf.h>
+#include "Log.h"
 
 Texture::Texture()
 	:mTextureID(0)
@@ -20,13 +20,14 @@ Texture::~Texture()
 
 bool Texture::Load(const std::string& fileName)
 {
+	LOG_INFO("Texture {} start to load", fileName);
 	int channels = 0;
 
 	unsigned char* image = stbi_load(fileName.c_str(), &mWidth, &mHeight, &channels, 0);
 
 	if (!image)
 	{
-		SDL_Log("Failed to load image : %s", fileName.c_str());
+		LOG_ERROR("Failed to load image : {}", fileName);
 		return false;
 	}
 
@@ -70,10 +71,11 @@ void Texture::SetActive()
 
 bool Texture::CreateFromText(const std::string& text, const std::string& fontName, int pointSize, const Vector3& color)
 {
+	Log::Info("Start to create texture from text");
 	TTF_Font* font = TTF_OpenFont(fontName.c_str(), pointSize);
 	if (!font)
 	{
-		SDL_Log("Failed to load font : %s", fontName.c_str());
+		LOG_INFO("Failed to load font : {}", fontName);
 		return false;
 	}
 
@@ -98,7 +100,7 @@ bool Texture::CreateFromText(const std::string& text, const std::string& fontNam
 
 	if (!formattedSurface)
 	{
-		SDL_Log("Failed to convert surface format");
+		Log::Error("Failed to convert surface format");
 		return false;
 	}
 

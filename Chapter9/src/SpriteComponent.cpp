@@ -6,6 +6,7 @@
 #include "Game.h"
 #include "Renderer.h"
 #include "Texture.h"
+#include "GameSystem.h"
 
 SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
 	:Component(owner, updateOrder)
@@ -13,7 +14,7 @@ SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
 	, mTexWidth(0)
 	, mTexture(nullptr)
 {
-	Game::GetRendererInstance()->AddSprite(this);
+	mOwner->GetRenderer()->AddSprite(this);
 }
 
 SpriteComponent::~SpriteComponent()

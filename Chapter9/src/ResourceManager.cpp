@@ -3,9 +3,10 @@
 #include "Mesh.h"
 #include "Game.h"
 #include "Renderer.h"
+#include "GameSystem.h"
 
-ResourceManager::ResourceManager(Game* game)
-	:mGame(game)
+ResourceManager::ResourceManager(GameContext* context)
+	:mGameContext(context)
 {
 
 }
@@ -47,7 +48,7 @@ Mesh* ResourceManager::GetMesh(const std::string& fileName)
 	else
 	{
 		std::unique_ptr<Mesh> ptr = std::make_unique<Mesh>();
-		if (ptr->Load(fileName, mGame->GetRendererInstance()))
+		if (ptr->Load(fileName, mGameContext->renderer, mGameContext))
 		{
 			m = ptr.get();
 			mMeshes.emplace(fileName, std::move(ptr));
