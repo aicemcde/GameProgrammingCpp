@@ -1,14 +1,16 @@
 #pragma once
 #include <SDL_scancode.h>
 #include <SDL_gamecontroller.h>
-#include <SDL_mouse.h>
-#include "Math.h"
 #include <SDL_events.h>
 #include <vector>
 #include <unordered_map>
 #include <array>
 #include <string>
-#include "Config.h"
+#include "Math.h"
+
+
+struct GameContext;
+struct InputActions;
 
 const int MAX_ACTIVE_PLAYER = 4;
 
@@ -84,7 +86,7 @@ struct InputState
 class InputSystem
 {
 public:
-	InputSystem(class Game* game);
+	InputSystem(GameContext* );
 	~InputSystem();
 
 	bool Initialize();
@@ -109,7 +111,7 @@ private:
 	void OnControllerDisconnected(SDL_JoystickID id);
 
 	InputState mState;
-	class Game* mGame;
+	GameContext* mContext = nullptr;
 	std::array<SDL_GameController*, MAX_ACTIVE_PLAYER> mControllerHandlers = { nullptr };
 	std::unordered_map<SDL_JoystickID, int> mJoystickID_To_ControllerPlayerID_map;
 	std::unordered_map<std::string, std::vector<InputActions>> mActionMap;

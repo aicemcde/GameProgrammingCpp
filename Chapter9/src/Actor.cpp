@@ -1,8 +1,10 @@
 #include "Actor.h"
+#include "Math.h"
+#include "GameSystem.h"
 
 
-Actor::Actor(class Game* game)
-	:mGame(game)
+Actor::Actor(GameContext* context)
+	:mGameContext(context)
 	,mRecomputeWorldTransform(true)
 	,mScale(1.0f)
 	,mPosition(Vector3::Zero)
@@ -64,6 +66,31 @@ void Actor::RemoveComponent(Component* component)
 	{
 		mComponents.erase(iter);
 	}
+}
+
+Renderer* Actor::GetRenderer() noexcept
+{
+	return mGameContext->renderer;
+}
+
+AudioSystem* Actor::GetAudioSystem() noexcept
+{
+	return mGameContext->audio;
+}
+
+Scene* Actor::GetScene() noexcept
+{
+	return mGameContext->scene;
+}
+
+ResourceManager* Actor::GetResourceManager() noexcept
+{
+	return mGameContext->resource;
+}
+
+GameContext* Actor::GetContext() noexcept
+{
+	return mGameContext;
 }
 
 void Actor::ComputeWorldTransform(float deltaTime)

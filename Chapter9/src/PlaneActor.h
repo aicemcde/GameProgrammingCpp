@@ -4,5 +4,5 @@
 class PlaneActor : public Actor
 {
 public:
-	explicit PlaneActor(class Game* game);
+	explicit PlaneActor(GameContext* context);
 };

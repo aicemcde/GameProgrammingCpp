@@ -3,13 +3,15 @@
 #include <vector>
 #include <memory>
 
+struct GameContext;
+
 class Mesh
 {
 public:
 	Mesh();
 	~Mesh();
 
-	bool Load(const std::string& fileName, class Renderer* renderer);
+	bool Load(const std::string& fileName, class Renderer* renderer, GameContext* context);
 	void Unload();
 
 	class VertexArray* GetVertexArray() { return mVertexArray.get(); }

@@ -46,6 +46,20 @@
         "code": 4,
         "playerIndex": 0
       }
+    ],
+    "Mouse_Right": [
+      {
+        "deviceType": 1,
+        "code": 3,
+        "playerIndex": 0
+      }
+    ],
+    "Restart": [
+      {
+        "deviceType": 0,
+        "code": 21,
+        "playerIndex": 0
+      }
     ]
   }
 }

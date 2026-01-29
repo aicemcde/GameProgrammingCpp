@@ -18,21 +18,17 @@
 #include "Log.h"
 #include "InputSystem.h"
 #include "FPSActor.h"
-
-
-Game* Game::sInstance = nullptr;
+#include "Config.h"
+#include "GameSystem.h"
+#include "FollowActor.h"
+#include "SplineActor.h"
 
 Game::Game()
 	:mIsRunning(true)
 	, mTicksCount(0)
-	, mScreenSize(1024.0f, 768.0f)
 	, mCameraActor(nullptr)
-	, mFPSActor(nullptr)
 {
-	if (sInstance == nullptr)
-	{
-		sInstance = this;
-	}
+	
 }
 
 Game::~Game()
@@ -50,33 +46,32 @@ bool Game::Initialize(GameConfig& config)
 		return false;
 	}
 
-	mScene = std::make_unique<Scene>(this);
-	mResourceManager = std::make_unique<ResourceManager>(this);
-	mRenderer = std::make_unique<Renderer>(this);
-	if (!mRenderer->Initialize(config))
+	mGameSystem = std::make_unique<GameSystem>();
+	
+
+	if (!mGameSystem->renderer->Initialize(config))
 	{
 		LOG_CRITICAL("Renderer could not initialize!");
 		return false;
 	}
 
-	mAudioSystem = std::make_unique<AudioSystem>(this);
-	if (!mAudioSystem->Initialize())
+	if (!mGameSystem->audio->Initialize())
 	{
 		LOG_CRITICAL("Failed to initialize audio system");
-		mAudioSystem->Shutdown();
-		mAudioSystem = nullptr;
+		mGameSystem->audio->Shutdown();
+		mGameSystem->audio = nullptr;
 		return false;
 	}
 
-	mInputSystem = std::make_unique<InputSystem>(this);
-	mInputSystem->Initialize();
-	mInputSystem->SetRelativeMouseMode(true);
+	
+	mGameSystem->input->Initialize();
+	mGameSystem->input->SetRelativeMouseMode(true);
 
 	LoadData();
 
 	mTicksCount = SDL_GetTicks();
 
-	LOG_INFO("game initialize success");
+	Log::Info("game initialize success");
 	return true;
 }
 
@@ -84,14 +79,14 @@ void Game::Shutdown()
 {
 	Log::Info("game shutdown");
 	UnloadData();
-	mInputSystem->Shutdown();
-	mAudioSystem->Shutdown();
+	mGameSystem->input->Shutdown();
+	mGameSystem->audio->Shutdown();
 	SDL_Quit();
 }
 
 void Game::RunLoop()
 {
-	LOG_INFO("Start RunLoop");
+	Log::Info("Start RunLoop");
 	GLenum err;
 	while (mIsRunning)
 	{
@@ -107,7 +102,7 @@ void Game::RunLoop()
 
 void Game::ProcessInput()
 {
-	mInputSystem->PrepareForUpdate();
+	mGameSystem->input->PrepareForUpdate();
 
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
@@ -128,8 +123,8 @@ void Game::ProcessInput()
 		}
 	}
 
-	mInputSystem->Update();
-	const InputState& state = mInputSystem->GetState();
+	mGameSystem->input->Update();
+	const InputState& state = mGameSystem->input->GetState();
 
 	const uint8_t* keyState = SDL_GetKeyboardState(NULL);
 	if (keyState[SDL_SCANCODE_ESCAPE])
@@ -137,30 +132,30 @@ void Game::ProcessInput()
 		mIsRunning = false;
 	}
 
-	mScene->ProcessInput(state);
+	mGameSystem->scene->ProcessInput(state);
 
 }
 
 void Game::HandleKeyPress(int key)
 {
-	switch (key)
+	/*switch (key)
 	{
 	case '-':
 	{
-		float volume = mAudioSystem->GetBusVolume("bus:/");
+		float volume = mGameSystem->audio->GetBusVolume("bus:/");
 		volume = Math::Max(0.0f, volume - 0.1f);
-		mAudioSystem->SetBusVolume("bus:/", volume);
+		mGameSystem->audio->SetBusVolume("bus:/", volume);
 		break;
 	}
 	case '=':
 	{
-		float volume = mAudioSystem->GetBusVolume("bus:/");
+		float volume = mGameSystem->audio->GetBusVolume("bus:/");
 		volume = Math::Min(1.0f, volume + 0.1f);
-		mAudioSystem->SetBusVolume("bus:/", volume);
+		mGameSystem->audio->SetBusVolume("bus:/", volume);
 		break;
 	}
 	case 'e':
-		mAudioSystem->PlayEvent("event:/Explosion2D");
+		mGameSystem->audio->PlayEvent("event:/Explosion2D");
 		break;
 	case 'm':
 		mMusicEvent.SetPaused(!mMusicEvent.GetPaused());
@@ -168,22 +163,16 @@ void Game::HandleKeyPress(int key)
 	case 'r':
 		if (!mReverbSnap.IsValid())
 		{
-			mReverbSnap = mAudioSystem->PlayEvent("snapshot:/WithReverb");
+			mReverbSnap = mGameSystem->audio->PlayEvent("snapshot:/WithReverb");
 		}
 		else
 		{
 			mReverbSnap.Stop();
 		}
 		break;
-	case '1':
-		mCameraActor->SetFootstepSurface(0.0f);
-		break;
-	case '2':
-		mCameraActor->SetFootstepSurface(0.5f);
-		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void Game::UpdateGame()
@@ -205,35 +194,35 @@ void Game::UpdateGame()
 		mSphereMoveComp->SetForwardSpeed(-500.0f);
 	}
 
-	mScene->Update(deltaTime);
-	mAudioSystem->SetListener(mRenderer->GetView(), mFPSActor->GetPosition(), deltaTime);
-	mAudioSystem->Update(deltaTime);
+	mGameSystem->scene->Update(deltaTime);
+	mGameSystem->audio->SetListener(mGameSystem->renderer->GetView(), mCameraActor->GetPosition(), deltaTime);
+	mGameSystem->audio->Update(deltaTime);
 	//ColorfulBG(deltaTime);
 }
 
 void Game::GenerateOutput()
 {
-	mRenderer->Draw();
+	mGameSystem->renderer->Draw();
 }
 
 void Game::LoadData()
 {
 	Log::Info("Start to loadData at Game class");
 	//Actor
-	Actor* a = mScene->CreateActor<Actor>(this);
+	Actor* a = mGameSystem->scene->CreateActor<Actor>();
 	a->SetPosition(Vector3(200.0f, 75.0f, 0.0f));
 	a->SetScale(100.0f);
 	Quaternion q(Vector3::UnitY, -Math::PiOver2);
 	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::Pi + Math::Pi / 4.0f));
 	a->SetRotation(q);
-	MeshComponent* mc = a->AddComponent_Pointer<MeshComponent>(a);
-	mc->SetMesh(mResourceManager->GetMesh("Assets/Cube.gpmesh"));
+	MeshComponent* mc = a->AddComponent_Pointer<MeshComponent>();
+	mc->SetMesh(mGameSystem->resource->GetMesh("Assets/Cube.gpmesh"));
 
-	a = mScene->CreateActor<Actor>(this);
+	a = mGameSystem->scene->CreateActor<Actor>();
 	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
 	a->SetScale(3.0f);
-	mc = a->AddComponent_Pointer<MeshComponent>(a);
-	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));
+	mc = a->AddComponent_Pointer<MeshComponent>();
+	mc->SetMesh(mGameSystem->resource->GetMesh("Assets/Sphere.gpmesh"));
 
 	//Floor
 	const float start = -1250.0f;
@@ -242,7 +231,7 @@ void Game::LoadData()
 	{
 		for (int j = 0; j < 10; ++j)
 		{
-			a = mScene->CreateActor<PlaneActor>(this);
+			a = mGameSystem->scene->CreateActor<PlaneActor>();
 			a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
 		}
 	}
@@ -250,11 +239,11 @@ void Game::LoadData()
 	q = Quaternion(Vector3::UnitX, Math::PiOver2);
 	for (int i = 0; i < 10; ++i)
 	{
-		a = mScene->CreateActor<PlaneActor>(this);
+		a = mGameSystem->scene->CreateActor<PlaneActor>();
 		a->SetPosition(Vector3(start + i * size, start - size, 0.0f));
 		a->SetRotation(q);
 
-		a = mScene->CreateActor<PlaneActor>(this);
+		a = mGameSystem->scene->CreateActor<PlaneActor>();
 		a->SetPosition(Vector3(start + i * size, -start + size, 0.0f));
 		a->SetRotation(q);
 	}
@@ -262,59 +251,59 @@ void Game::LoadData()
 	q = Quaternion::Concatenate(q, Quaternion(Vector3::UnitZ, Math::PiOver2));
 	for (int i = 0; i < 10; ++i)
 	{
-		a = mScene->CreateActor<PlaneActor>(this);
+		a = mGameSystem->scene->CreateActor<PlaneActor>();
 		a->SetPosition(Vector3(start - size, start + i * size, 0.0f));
 		a->SetRotation(q);
 
-		a = mScene->CreateActor<PlaneActor>(this);
+		a = mGameSystem->scene->CreateActor<PlaneActor>();
 		a->SetPosition(Vector3(-start + size, start + i * size, 0.0f));
 		a->SetRotation(q);
 	}
 
 	//Light
-	mRenderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
-	DirectionalLight& dir = mRenderer->GetDirectionalLight();
+	mGameSystem->renderer->SetAmbientLight(Vector3(0.2f, 0.2f, 0.2f));
+	DirectionalLight& dir = mGameSystem->renderer->GetDirectionalLight();
 	dir.mDirection = Vector3(0.0f, -0.70f, -0.70f);
 	dir.mDiffuseColor = Vector3(0.78f, 0.88f, 1.0f);
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	//Camera
 	//mCameraActor = mScene->CreateActor<CameraActor>(this);
-	mFPSActor = mScene->CreateActor<FPSActor>(this);
+	mCameraActor = mGameSystem->scene->CreateActor<FollowActor>();
 
 	//UI
-	a = mScene->CreateActor<Actor>(this);
+	a = mGameSystem->scene->CreateActor<Actor>();
 	a->SetPosition(Vector3(-350.0f, -350.0f, 0.0f));
-	SpriteComponent* sc = a->AddComponent_Pointer<SpriteComponent>(a);
-	sc->SetTexture(mResourceManager->GetTexture("Assets/HealthBar.png"));
+	SpriteComponent* sc = a->AddComponent_Pointer<SpriteComponent>();
+	sc->SetTexture(mGameSystem->resource->GetTexture("Assets/HealthBar.png"));
 
-	a = mScene->CreateActor<Actor>(this);
+	a = mGameSystem->scene->CreateActor<Actor>();
 	a->SetPosition(Vector3(375.0f, -275.0f, 0.0f));
 	a->SetScale(0.75f);
-	sc = a->AddComponent_Pointer<SpriteComponent>(a);
-	sc->SetTexture(mResourceManager->GetTexture("Assets/Radar.png"));
+	sc = a->AddComponent_Pointer<SpriteComponent>();
+	sc->SetTexture(mGameSystem->resource->GetTexture("Assets/Radar.png"));
 
 	//spheres with audio
-	a = mScene->CreateActor<Actor>(this);
+	a = mGameSystem->scene->CreateActor<Actor>();
 	mFireSphere = a;
 	a->SetPosition(Vector3(500.0f, -75.0f, 0.0f));
 	a->SetScale(1.0f);
-	mc = a->AddComponent_Pointer<MeshComponent>(a);
-	mc->SetMesh(mResourceManager->GetMesh("Assets/Sphere.gpmesh"));
-	AudioComponent* ac = a->AddComponent_Pointer<AudioComponent>(a, 200.0f, Vector3(500.0f, -75.0f, 0.0f));
-	ac->PlayEvent("event:/FireLoop");
-	mSphereMoveComp = a->AddComponent_Pointer<MoveComponent>(a);
+	mc = a->AddComponent_Pointer<MeshComponent>();
+	mc->SetMesh(mGameSystem->resource->GetMesh("Assets/Sphere.gpmesh"));
+	AudioComponent* ac = a->AddComponent_Pointer<AudioComponent>(200.0f, Vector3(500.0f, -75.0f, 0.0f));
+	ac->PlayEvent("event:/FireLoop", mGameSystem->context.get());
+	mSphereMoveComp = a->AddComponent_Pointer<MoveComponent>();
 	mSphereMoveComp->SetForwardSpeed(0.0f);
 
 	//start music
-	mMusicEvent = mAudioSystem->PlayEvent("event:/Music");
+	mMusicEvent = mGameSystem->audio->PlayEvent("event:/Music");
 }
 
 void Game::UnloadData()
 {
 	Log::Info("start to unload data");
-	mRenderer->UnloadData();
-	mScene->Unload();
+	mGameSystem->renderer->UnloadData();
+	mGameSystem->scene->Unload();
 }
 
 void Game::ColorfulBG(float deltaTime)

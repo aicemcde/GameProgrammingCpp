@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableASAN>true</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -139,6 +140,12 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\OrbitCamera.cpp" />
+    <ClCompile Include="src\FollowActor.cpp" />
+    <ClCompile Include="src\FollowCamera.cpp" />
+    <ClCompile Include="src\FPSCamera.cpp" />
+    <ClCompile Include="src\GameSystem.cpp" />
+    <ClCompile Include="src\CameraComponent.cpp" />
     <ClCompile Include="src\Actor.cpp" />
     <ClCompile Include="src\AudioComponent.cpp" />
     <ClCompile Include="src\AudioSystem.cpp" />
@@ -161,11 +168,19 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SoundEvent.cpp" />
+    <ClCompile Include="src\SplineActor.cpp" />
+    <ClCompile Include="src\SplineCamera.cpp" />
     <ClCompile Include="src\SpriteComponent.cpp" />
+    <ClCompile Include="src\StructData.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\FollowActor.h" />
+    <ClInclude Include="src\FollowCamera.h" />
+    <ClInclude Include="src\FPSCamera.h" />
+    <ClInclude Include="src\GameSystem.h" />
+    <ClInclude Include="src\CameraComponent.h" />
     <ClInclude Include="src\FPSActor.h" />
     <ClInclude Include="src\Actor.h" />
     <ClInclude Include="src\AudioComponent.h" />
@@ -183,6 +198,7 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\MeshComponent.h" />
     <ClInclude Include="src\MoveComponent.h" />
+    <ClInclude Include="src\OrbitCamera.h" />
     <ClInclude Include="src\PlaneActor.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Renderer.h" />
@@ -190,6 +206,8 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\SoundEvent.h" />
+    <ClInclude Include="src\SplineActor.h" />
+    <ClInclude Include="src\SplineCamera.h" />
     <ClInclude Include="src\SpriteComponent.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\StructData.h" />

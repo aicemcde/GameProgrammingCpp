@@ -8,6 +8,8 @@
 #include "Game.h"
 #include "ResourceManager.h"
 #include <json.hpp>
+#include "Log.h"
+#include "GameSystem.h"
 
 const size_t VERTICS_SIZE = 8;
 const size_t INDICES_SIZE = 3;
@@ -27,7 +29,7 @@ Mesh::~Mesh()
 
 }
 
-bool Mesh::Load(const std::string& fileName, Renderer* renderer)
+bool Mesh::Load(const std::string& fileName, Renderer* renderer, GameContext* context)
 {
 	std::ifstream file(fileName);
 	if (!file.is_open())
@@ -79,10 +81,10 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer)
 		for (const auto& tex : texJson)
 		{
 			std::string texName = tex.get<std::string>();
-			Texture* t = Game::GetResourceInstance()->GetTexture(texName);
+			Texture* t = context->resource->GetTexture(texName);
 			if (t == nullptr)
 			{
-				t = Game::GetResourceInstance()->GetTexture(texName);
+				t = context->resource->GetTexture(texName);
 			}
 			mTextures.emplace_back(t);
 		}

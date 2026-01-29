@@ -6,17 +6,19 @@
 #include "AudioSystem.h"
 #include "MeshComponent.h"
 #include "ResourceManager.h"
+#include "GameSystem.h"
+#include "InputSystem.h"
 
-CameraActor::CameraActor(Game* game)
-	:Actor(game)
+CameraActor::CameraActor(GameContext* context)
+	:Actor(context)
 	,mLastFootstep(0.0f)
 	,mFootstepSurface(0.0f)
 {
-	mMoveComp = AddComponent_Pointer<MoveComponent>(this);
-	mAudioComp = AddComponent_Pointer<AudioComponent>(this);
-	MeshComponent* mc = AddComponent_Pointer<MeshComponent>(this);
-	mc->SetMesh(mGame->GetResourceManager()->GetMesh("Assets/Sphere.gpmesh"));
-	mFootstep = mAudioComp->PlayEvent("event:/Footstep");
+	mMoveComp = AddComponent_Pointer<MoveComponent>();
+	mAudioComp = AddComponent_Pointer<AudioComponent>();
+	MeshComponent* mc = AddComponent_Pointer<MeshComponent>();
+	mc->SetMesh(mGameContext->resource->GetMesh("Assets/Sphere.gpmesh"));
+	mFootstep = mAudioComp->PlayEvent("event:/Footstep", mGameContext);
 	mFootstep.SetPaused(true);
 }
 
@@ -27,7 +29,7 @@ void CameraActor::UpdateActor(float deltaTime)
 	mLastFootstep -= deltaTime;
 	if (!Math::NearZero(mMoveComp->GetForwardSpeed()) && mLastFootstep <= 0.0f)
 	{
-		SoundEvent footstep = mAudioComp->PlayEvent("event:/Footstep");
+		SoundEvent footstep = mAudioComp->PlayEvent("event:/Footstep", mGameContext);
 		footstep.SetParameter("Surface", mFootstepSurface);
 		mLastFootstep = 0.5f;
 	}
@@ -37,26 +39,26 @@ void CameraActor::UpdateActor(float deltaTime)
 	Vector3 up = Vector3::UnitZ;
 
 	Matrix4 view = Matrix4::CreateLookAt(mCameraPos, target, up);
-	Game::GetRendererInstance()->SetViewMatrix(view);
+	mGameContext->renderer->SetViewMatrix(view);
 }
 
 void CameraActor::ActorInput(const InputState& state)
 {
 	float forwardSpeed = 0.0f;
 	float angularSpeed = 0.0f;
-	if (mGame->GetInputSystemInstance()->GetMappedButtonState("Move_Forward") == EHeld)
+	if (mGameContext->input->GetMappedButtonState("Move_Forward") == EHeld)
 	{
 		forwardSpeed += 300.0f;
 	}
-	if (mGame->GetInputSystemInstance()->GetMappedButtonState("Move_Back") == EHeld)
+	if (mGameContext->input->GetMappedButtonState("Move_Back") == EHeld)
 	{
 		forwardSpeed -= 300.0f;
 	}
-	if (mGame->GetInputSystemInstance()->GetMappedButtonState("Perspective_Left") == EHeld)
+	if (mGameContext->input->GetMappedButtonState("Perspective_Left") == EHeld)
 	{
 		angularSpeed -= Math::TwoPi;
 	}
-	if (mGame->GetInputSystemInstance()->GetMappedButtonState("Perspective_Right") == EHeld)
+	if (mGameContext->input->GetMappedButtonState("Perspective_Right") == EHeld)
 	{
 		angularSpeed += Math::TwoPi;
 	}

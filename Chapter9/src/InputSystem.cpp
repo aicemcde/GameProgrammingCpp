@@ -1,6 +1,9 @@
 #include "InputSystem.h"
 #include "SDL_keyboard.h"
 #include "Log.h"
+#include "Math.h"
+#include "GameSystem.h"
+#include "Config.h"
 
 const int CONTROLLER_1D_DEADZONE = 250;
 const int CONTROLLER_1D_MAXVALUE = 30000;
@@ -102,8 +105,8 @@ ButtonState ControllerState::GetKeyState(SDL_GameControllerButton button) const
 	}
 }
 
-InputSystem::InputSystem(Game* game)
-	: mGame(game)
+InputSystem::InputSystem(GameContext* context)
+	:mContext(context)
 {
 
 }
@@ -402,8 +405,10 @@ ButtonState InputSystem::GetMappedButtonState(const std::string& actionName)
 			}
 
 			return ENone;
+			break;
 		}
 		default:
+			return ENone;
 			break;
 		}
 	}

@@ -1,16 +1,18 @@
 ﻿#include "Renderer.h"
-#include <SDL.h>
 #include "SpriteComponent.h"
 #include <algorithm>
 #include "Shader.h"
 #include "VertexArray.h"
-#include "Game.h"
 #include "MeshComponent.h"
 #include <SDL_ttf.h>
+#include "Math.h"
+#include "Config.h"
+#include "GameSystem.h"
 
 
-Renderer::Renderer(Game* game)
-	:mGame(game)
+Renderer::Renderer(GameContext* context)
+	:mGameContext(context)
+	, mGLContext(nullptr)
 {
 	
 }
@@ -46,6 +48,8 @@ bool Renderer::Initialize(GameConfig& config)
 		mWindow = SDL_CreateWindow("Asteroids_OpenGL", 100, 100, config.window.width, config.window.height, SDL_WINDOW_OPENGL);
 		LOG_INFO("window");
 	}
+
+	mScreenSize = Vector2(config.window.width, config.window.height);
 	
 	
 	if (!mWindow)
@@ -60,8 +64,8 @@ bool Renderer::Initialize(GameConfig& config)
 		return false;
 	}
 
-	mContext = SDL_GL_CreateContext(mWindow);
-	if (!mContext)
+	mGLContext = SDL_GL_CreateContext(mWindow);
+	if (!mGLContext)
 	{
 		SDL_Log("Failed to create context : %s", SDL_GetError());
 		return false;
@@ -97,7 +101,7 @@ void Renderer::Shutdown()
 	mSpriteShader->Unload();
 	mMeshShader->Unload();
 	UnloadData();
-	SDL_GL_DeleteContext(mContext);
+	SDL_GL_DeleteContext(mGLContext);
 	SDL_DestroyWindow(mWindow);
 }
 
@@ -138,6 +142,17 @@ void Renderer::Draw()
 	}
 
 	SDL_GL_SwapWindow(mWindow);
+}
+
+Vector3 Renderer::UnProject(const Vector3& screenPoint) const
+{
+	Vector3 deviceCoord = screenPoint;
+	deviceCoord.x /= mScreenSize.x * 0.5f;
+	deviceCoord.y /= mScreenSize.y * 0.5f;
+	
+	Matrix4 unProjection = mView * mProjection;
+	unProjection.Invert();
+	return Vector3::TransformWithPerspDiv(deviceCoord, unProjection);
 }
 
 void Renderer::AddSprite(SpriteComponent* sc)
@@ -207,7 +222,7 @@ bool Renderer::LoadShaders()
 	mMeshShader->SetActive();
 	mView = Matrix4::CreateLookAt(Vector3::Zero, Vector3::UnitX, Vector3::UnitZ);
 	mProjection = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
-		mGame->GetScreenSize().x, mGame->GetScreenSize().y, 25.0f, 10000.0f);
+		mScreenSize.x, mScreenSize.y, 25.0f, 10000.0f);
 	mMeshShader->SetMatrixUniform("uViewProj", mView * mProjection);
 	return true;
 }
@@ -221,4 +236,16 @@ void Renderer::SetLightUniforms(Shader* shader)
 	shader->SetVectorUniform("uDirLight.mDirection", mDirLight.mDirection);
 	shader->SetVectorUniform("uDirLight.mDiffuseColor", mDirLight.mDiffuseColor);
 	shader->SetVectorUniform("uDirLight.mSpecColor", mDirLight.mSpecColor);
+}
+
+void Renderer::GetScreenDirection(Vector3& outStart, Vector3& outDir) const
+{
+	Vector3 screenPoint(0.0f, 0.0f, 0.0f);
+	outStart = UnProject(outStart);
+
+	screenPoint.z = 0.9f;
+	Vector3 end = UnProject(screenPoint);
+
+	outDir = end - outStart;
+	outDir.Normalize();
 }

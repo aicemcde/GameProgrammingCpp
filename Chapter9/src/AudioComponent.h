@@ -1,7 +1,8 @@
-#include "SoundEvent.h"
 #include "Component.h"
 #include <string>
 #include <vector>
+
+class SoundEvent;
 
 class AudioComponent : public Component
 {
@@ -12,7 +13,7 @@ public:
 	void Update(float deltaTime) override;
 	void OnUpdateWorldTransform(float deltaTime) override;
 
-	SoundEvent PlayEvent(const std::string& name);
+	SoundEvent PlayEvent(const std::string& name, GameContext* context);
 	void StopAllEvent();
 private:
 	Vector3 mLastPos;

@@ -1,11 +1,10 @@
 #include "Scene.h"
-#include "Actor.h"
+#include "GameSystem.h"
 #include <algorithm>
-#include "SpriteComponent.h"
 
-Scene::Scene(Game* game)
-	:mUpdatingActors(false)
-	, mGame(game)
+Scene::Scene(GameContext* context)
+	: mUpdatingActors(false)
+	, mGameContext(context)
 {
 
 }

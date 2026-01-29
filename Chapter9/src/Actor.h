@@ -1,12 +1,17 @@
 #pragma once
-#include <cstdint>
-#include "Math.h"
 #include <vector>
 #include <memory>
 #include <concepts>
 #include <algorithm>
 #include "Component.h"
-#include "InputSystem.h"
+#include "Math.h"
+
+inline constexpr auto MAX_MOUSE_SPEED = 500;
+inline constexpr auto MAX_MOVE_SPEED = 300.0f;
+inline constexpr auto MAX_ANGULAR_SPEED = 3.1415926535f * 8.0f;
+
+struct InputState;
+struct GameContext;
 
 class Actor
 {
@@ -20,29 +25,29 @@ public:
 	};
 
 	template<typename T, typename... Args>
-	requires std::derived_from<T, class Component>
+		requires std::derived_from<T, class Component>
 	void AddComponent(Args&&... args)
 	{
-		auto newComponent = std::make_unique<T>(std::forward<Args>(args)...);
+		auto newComponent = std::make_unique<T>(this, std::forward<Args>(args)...);
 		int myOrder = newComponent->GetUpdateOrder();
 		auto iter = std::ranges::lower_bound(mComponents, myOrder, {}, &Component::GetUpdateOrder);
 		mComponents.insert(iter, std::move(newComponent));
 	}
 
-	template<typename T,typename... Args>
-	requires std::derived_from<T, class Component>
+	template<typename T, typename... Args>
+		requires std::derived_from<T, class Component>
 	T* AddComponent_Pointer(Args&&... args)
 	{
-		auto newComponent = std::make_unique<T>(std::forward<Args>(args)...);
+		auto newComponent = std::make_unique<T>(this, std::forward<Args>(args)...);
 		T* ptr = newComponent.get();
 		int myOrder = newComponent->GetUpdateOrder();
 		auto iter = std::ranges::lower_bound(mComponents, myOrder, {}, &Component::GetUpdateOrder);
 		mComponents.insert(iter, std::move(newComponent));
 		return ptr;
 	}
-	
-	explicit Actor(class Game* game);
-	virtual ~Actor()=default;
+
+	Actor(GameContext* context);
+	virtual ~Actor() = default;
 
 	void Update(float deltaTime);
 	void UpdateComponents(float deltaTime);
@@ -68,8 +73,14 @@ public:
 	Vector3 GetRight() const { return Vector3::Transform(Vector3::UnitY, mRotation); }
 
 	void RemoveComponent(class Component* component);
+
+	class Renderer* GetRenderer() noexcept;
+	class AudioSystem* GetAudioSystem() noexcept;
+	class Scene* GetScene() noexcept;
+	class ResourceManager* GetResourceManager() noexcept;
+	GameContext* GetContext() noexcept;
 protected:
-	class Game* mGame;
+	GameContext* mGameContext;
 	State mState;
 
 	//pos of world space

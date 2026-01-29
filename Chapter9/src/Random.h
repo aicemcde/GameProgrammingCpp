@@ -1,6 +1,6 @@
 #pragma once
-#include "Math.h"
 #include <random>
+#include "Math.h"
 
 class Random
 {
