@@ -54,6 +54,20 @@
         "playerIndex": 0
       }
     ],
+    "Mouse_Left": [
+      {
+        "deviceType": 1,
+        "code": 1,
+        "playerIndex": 0
+      }
+    ],
+    "Mouse_Midle": [
+      {
+        "deviceType": 1,
+        "code": 2,
+        "playerIndex": 0
+      }
+    ],
     "Restart": [
       {
         "deviceType": 0,

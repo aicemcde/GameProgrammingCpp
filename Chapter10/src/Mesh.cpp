@@ -21,13 +21,10 @@ Mesh::Mesh()
 	,mRadius(0.0f)
 	,mSpecPower(0.0f)
 {
-
+	
 }
 
-Mesh::~Mesh()
-{
-
-}
+Mesh::~Mesh() = default;
 
 bool Mesh::Load(const std::string& fileName, Renderer* renderer, GameContext* context)
 {
@@ -108,6 +105,7 @@ bool Mesh::Load(const std::string& fileName, Renderer* renderer, GameContext* co
 			}
 
 			Vector3 pos(vert[0].get<float>(), vert[1].get<float>(), vert[2].get<float>());
+			mObjectBox.UpdateMinMax(pos);
 			//mRadius is squared
 			mRadius = Math::Max(mRadius, pos.LengthSq());
 
@@ -164,3 +162,4 @@ Texture* Mesh::GetTexture(size_t index)
 		return nullptr;
 	}
 }
+

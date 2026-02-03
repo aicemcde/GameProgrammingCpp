@@ -140,6 +140,10 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BallActor.cpp" />
+    <ClCompile Include="src\BallMove.cpp" />
+    <ClCompile Include="src\BoxComponent.cpp" />
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\OrbitCamera.cpp" />
     <ClCompile Include="src\FollowActor.cpp" />
     <ClCompile Include="src\FollowCamera.cpp" />
@@ -161,6 +165,7 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MeshComponent.cpp" />
     <ClCompile Include="src\MoveComponent.cpp" />
+    <ClCompile Include="src\PhysWorld.cpp" />
     <ClCompile Include="src\PlaneActor.cpp" />
     <ClCompile Include="src\Random.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
@@ -176,6 +181,10 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BallActor.h" />
+    <ClInclude Include="src\BallMove.h" />
+    <ClInclude Include="src\BoxComponent.h" />
+    <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\FollowActor.h" />
     <ClInclude Include="src\FollowCamera.h" />
     <ClInclude Include="src\FPSCamera.h" />
@@ -199,6 +208,8 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClInclude Include="src\MeshComponent.h" />
     <ClInclude Include="src\MoveComponent.h" />
     <ClInclude Include="src\OrbitCamera.h" />
+    <ClInclude Include="src\PhysicsTypes.h" />
+    <ClInclude Include="src\PhysWorld.h" />
     <ClInclude Include="src\PlaneActor.h" />
     <ClInclude Include="src\Random.h" />
     <ClInclude Include="src\Renderer.h" />

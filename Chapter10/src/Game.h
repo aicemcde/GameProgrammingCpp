@@ -18,6 +18,9 @@ public:
 	void RunLoop();
 	void Shutdown();
 	void SetGameRunning(bool running) { mIsRunning = running; }
+
+	std::vector<class PlaneActor*>& GetPlanes() { return mPlanes; }
+	void AddPlanes(class PlaneActor*);
 private:
 	void ProcessInput();
 	void HandleKeyPress(int key);
@@ -45,4 +48,5 @@ private:
 
 	class Actor* mFireSphere;
 	class MoveComponent* mSphereMoveComp;
+	std::vector<class PlaneActor*> mPlanes;
 };

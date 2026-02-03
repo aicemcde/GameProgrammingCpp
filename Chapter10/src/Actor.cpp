@@ -88,6 +88,11 @@ ResourceManager* Actor::GetResourceManager() noexcept
 	return mGameContext->resource;
 }
 
+PhysWorld* Actor::GetPhysWorld() noexcept
+{
+	return mGameContext->physWorld;
+}
+
 GameContext* Actor::GetContext() noexcept
 {
 	return mGameContext;
@@ -106,5 +111,25 @@ void Actor::ComputeWorldTransform(float deltaTime)
 		{
 			comp->OnUpdateWorldTransform(deltaTime);
 		}
+	}
+}
+
+void Actor::RotateToNewForward(const Vector3& forward)
+{
+	float dot = Vector3::Dot(Vector3::UnitX, forward);
+	float angle = Math::Acos(dot);
+	if (dot > 0.9999f)
+	{
+		SetRotation(Quaternion::Identity);
+	}
+	else if (dot < -0.9999f)
+	{
+		SetRotation(Quaternion(Vector3::UnitZ, Math::Pi));
+	}
+	else
+	{
+		Vector3 axis = Vector3::Cross(Vector3::UnitX, forward);
+		axis.Normalize();
+		SetRotation(Quaternion(axis, angle));
 	}
 }

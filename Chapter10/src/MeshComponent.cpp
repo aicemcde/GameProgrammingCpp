@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "GameSystem.h"
 #include "Log.h"
+#include "Collision.h"
 
 MeshComponent::MeshComponent(Actor* owner)
 	:Component(owner)
@@ -19,7 +20,7 @@ MeshComponent::MeshComponent(Actor* owner)
 
 MeshComponent::~MeshComponent()
 {
-
+	mOwner->GetRenderer()->RemoveMeshComp(this);
 }
 
 void MeshComponent::Draw(Shader* shader)
@@ -48,4 +49,9 @@ void MeshComponent::Draw(Shader* shader)
 	{
 		Log::Error("Mesh could not draw");
 	}
+}
+
+const AABB& MeshComponent::GetBox()
+{
+	return mMesh->GetBox();
 }

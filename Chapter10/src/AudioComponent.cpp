@@ -1,7 +1,6 @@
 ﻿#include "AudioComponent.h"
 #include "AudioSystem.h"
 #include "Actor.h"
-#include <cmath>
 #include "GameSystem.h"
 #include "SoundEvent.h"
 
@@ -70,9 +69,9 @@ void AudioComponent::OnUpdateWorldTransform(float deltaTime)
 
 		C++
 
-		// 簡易的なローパスフィルタ（スムージング）
+		簡易的なローパスフィルタ（スムージング）
 		Vector3 rawVelocity = CalVelocity(currentPos, mLastPos, deltaTime);
-		// 前回の速度を90%、今回の計算値を10%混ぜるなど
+		 前回の速度を90%、今回の計算値を10%混ぜるなど
 		velocity = Lerp(velocity, rawVelocity, 0.1f);
 		*/
 		mLastVelocity = LerpVector3(mLastVelocity, rawVelocity, 0.1f);

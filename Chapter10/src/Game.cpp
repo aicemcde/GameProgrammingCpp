@@ -46,7 +46,7 @@ bool Game::Initialize(GameConfig& config)
 		return false;
 	}
 
-	mGameSystem = std::make_unique<GameSystem>();
+	mGameSystem = std::make_unique<GameSystem>(this);
 	
 
 	if (!mGameSystem->renderer->Initialize(config))
@@ -269,7 +269,7 @@ void Game::LoadData()
 
 	//Camera
 	//mCameraActor = mScene->CreateActor<CameraActor>(this);
-	mCameraActor = mGameSystem->scene->CreateActor<FollowActor>();
+	mCameraActor = mGameSystem->scene->CreateActor<FPSActor>();
 
 	//UI
 	a = mGameSystem->scene->CreateActor<Actor>();
@@ -318,4 +318,9 @@ void Game::ColorfulBG(float deltaTime)
 	}
 	glClearColor(mRGB_bgColor.x, mRGB_bgColor.y, mRGB_bgColor.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void Game::AddPlanes(class PlaneActor* plane)
+{
+	mPlanes.emplace_back(plane);
 }

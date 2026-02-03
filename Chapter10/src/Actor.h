@@ -60,6 +60,7 @@ public:
 
 	State GetState() const { return mState; }
 	Matrix4 GetWorldTransform() const { return mWorldTransform; }
+	void RotateToNewForward(const Vector3& forward);
 
 	Quaternion GetRotation() const { return mRotation; }
 	void SetRotation(const Quaternion& q) { mRotation = q; mRecomputeWorldTransform = true; }
@@ -78,6 +79,7 @@ public:
 	class AudioSystem* GetAudioSystem() noexcept;
 	class Scene* GetScene() noexcept;
 	class ResourceManager* GetResourceManager() noexcept;
+	class PhysWorld* GetPhysWorld() noexcept;
 	GameContext* GetContext() noexcept;
 protected:
 	GameContext* mGameContext;
@@ -96,4 +98,6 @@ private:
 	float mScale;
 	Quaternion mRotation;
 	Vector3 mPosition;
+
+	
 };

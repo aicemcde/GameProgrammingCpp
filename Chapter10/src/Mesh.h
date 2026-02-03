@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "Collision.h"
 
 struct GameContext;
 
@@ -19,10 +20,12 @@ public:
 	const std::string& GetShaderName() const { return mShaderName; }
 	float GetRadius() const { return mRadius; }
 	float GetSpecPower() const noexcept { return mSpecPower; }
+	const AABB& GetBox() const { return mObjectBox; }
 private:
 	std::vector<class Texture*> mTextures;
 	std::unique_ptr<class VertexArray> mVertexArray;
 	std::string mShaderName;
 	float mRadius;
 	float mSpecPower;
+	AABB mObjectBox;
 };

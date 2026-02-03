@@ -40,7 +40,7 @@ bool Renderer::Initialize(GameConfig& config)
 	LOG_INFO("Width: {}, Height: {}", config.window.width, config.window.height);
 	if (config.window.fullScreen)
 	{
-		mWindow = SDL_CreateWindow("Asteroids_OpenGL", 100, 100, config.window.width, config.window.height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+		mWindow = SDL_CreateWindow("Chapter10", 100, 100, config.window.width, config.window.height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
 		LOG_INFO("Window is full screen");
 	}
 	else
