@@ -71,6 +71,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -106,20 +109,17 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\vclib\SDL2-2.32.10\include;C:\vclib\SDL2_image-2.8.8\include;C:\vclib\glew-2.2.0\include\GL;C:\vclib\SDL2_ttf-2.24.0\include;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\fsbank\inc;C:\vclib\spdlog-1.17.0\include;C:\vclib\nlohmann</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\inc;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\fsbank\inc</AdditionalIncludeDirectories>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vclib\SDL2-2.32.10\lib\x64;C:\vclib\SDL2_image-2.8.8\lib\x64;C:\vclib\glew-2.2.0\lib\Release\x64;C:\vclib\SDL2_ttf-2.24.0\lib\x64;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\fsbank\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;opengl32.lib;SDL2_ttf.lib;fmodstudioL64_vc.lib;fmodL64_vc.lib;fsbank64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib;C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\fsbank\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmodstudioL64_vc.lib;fmodL64_vc.lib;fsbank64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /y /d "C:\vclib\glew-2.2.0\bin\Release\x64\glew32.dll" "$(OutDir)"
-xcopy /y /d "C:\vclib\SDL2-2.32.10\lib\x64\SDL2.dll" "$(OutDir)"
-xcopy /y /d "C:\vclib\SDL2_ttf-2.24.0\lib\x64\SDL2_ttf.dll" "$(OutDir)"
-xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib\fmodstudioL64.dll" "$(OutDir)"
+      <Command>xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\studio\lib\fmodstudioL64.dll" "$(OutDir)"
 xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\lowlevel\lib\fmodL64.dll" "$(OutDir)"
 xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api\fsbank\lib\fsbank64.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
@@ -140,90 +140,92 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\BallActor.cpp" />
-    <ClCompile Include="src\BallMove.cpp" />
-    <ClCompile Include="src\BoxComponent.cpp" />
-    <ClCompile Include="src\Collision.cpp" />
-    <ClCompile Include="src\OrbitCamera.cpp" />
-    <ClCompile Include="src\FollowActor.cpp" />
-    <ClCompile Include="src\FollowCamera.cpp" />
-    <ClCompile Include="src\FPSCamera.cpp" />
-    <ClCompile Include="src\GameSystem.cpp" />
-    <ClCompile Include="src\CameraComponent.cpp" />
-    <ClCompile Include="src\Actor.cpp" />
-    <ClCompile Include="src\AudioComponent.cpp" />
-    <ClCompile Include="src\AudioSystem.cpp" />
-    <ClCompile Include="src\CameraActor.cpp" />
-    <ClCompile Include="src\CircleComponent.cpp" />
-    <ClCompile Include="src\Component.cpp" />
-    <ClCompile Include="src\FPSActor.cpp" />
-    <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\InputSystem.cpp" />
-    <ClCompile Include="src\Log.cpp" />
-    <ClCompile Include="src\Main.cpp" />
-    <ClCompile Include="src\Math.cpp" />
-    <ClCompile Include="src\Mesh.cpp" />
-    <ClCompile Include="src\MeshComponent.cpp" />
-    <ClCompile Include="src\MoveComponent.cpp" />
-    <ClCompile Include="src\PhysWorld.cpp" />
-    <ClCompile Include="src\PlaneActor.cpp" />
-    <ClCompile Include="src\Random.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\ResourceManager.cpp" />
-    <ClCompile Include="src\Scene.cpp" />
-    <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\SoundEvent.cpp" />
-    <ClCompile Include="src\SplineActor.cpp" />
-    <ClCompile Include="src\SplineCamera.cpp" />
-    <ClCompile Include="src\SpriteComponent.cpp" />
-    <ClCompile Include="src\StructData.cpp" />
-    <ClCompile Include="src\Texture.cpp" />
-    <ClCompile Include="src\VertexArray.cpp" />
+    <ClCompile Include="src\actor\BallActor.cpp" />
+    <ClCompile Include="src\comp\BallMove.cpp" />
+    <ClCompile Include="src\comp\BoxComponent.cpp" />
+    <ClCompile Include="src\util\Collision.cpp" />
+    <ClCompile Include="src\comp\OrbitCamera.cpp" />
+    <ClCompile Include="src\actor\FollowActor.cpp" />
+    <ClCompile Include="src\comp\FollowCamera.cpp" />
+    <ClCompile Include="src\comp\FPSCamera.cpp" />
+    <ClCompile Include="src\sys\GameSystem.cpp" />
+    <ClCompile Include="src\comp\CameraComponent.cpp" />
+    <ClCompile Include="src\actor\Actor.cpp" />
+    <ClCompile Include="src\comp\AudioComponent.cpp" />
+    <ClCompile Include="src\sys\AudioSystem.cpp" />
+    <ClCompile Include="src\actor\CameraActor.cpp" />
+    <ClCompile Include="src\comp\CircleComponent.cpp" />
+    <ClCompile Include="src\comp\Component.cpp" />
+    <ClCompile Include="src\actor\FPSActor.cpp" />
+    <ClCompile Include="src\core\Game.cpp" />
+    <ClCompile Include="src\sys\InputSystem.cpp" />
+    <ClCompile Include="src\util\Log.cpp" />
+    <ClCompile Include="src\core\Main.cpp" />
+    <ClCompile Include="src\util\Math.cpp" />
+    <ClCompile Include="src\util\Mesh.cpp" />
+    <ClCompile Include="src\comp\MeshComponent.cpp" />
+    <ClCompile Include="src\comp\MoveComponent.cpp" />
+    <ClCompile Include="src\sys\PhysWorld.cpp" />
+    <ClCompile Include="src\actor\PlaneActor.cpp" />
+    <ClCompile Include="src\util\Random.cpp" />
+    <ClCompile Include="src\sys\Renderer.cpp" />
+    <ClCompile Include="src\sys\ResourceManager.cpp" />
+    <ClCompile Include="src\sys\Scene.cpp" />
+    <ClCompile Include="src\util\Shader.cpp" />
+    <ClCompile Include="src\util\SoundEvent.cpp" />
+    <ClCompile Include="src\actor\SplineActor.cpp" />
+    <ClCompile Include="src\comp\SplineCamera.cpp" />
+    <ClCompile Include="src\comp\SpriteComponent.cpp" />
+    <ClCompile Include="src\util\StructData.cpp" />
+    <ClCompile Include="src\util\Texture.cpp" />
+    <ClCompile Include="src\util\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\BallActor.h" />
-    <ClInclude Include="src\BallMove.h" />
-    <ClInclude Include="src\BoxComponent.h" />
-    <ClInclude Include="src\Collision.h" />
-    <ClInclude Include="src\FollowActor.h" />
-    <ClInclude Include="src\FollowCamera.h" />
-    <ClInclude Include="src\FPSCamera.h" />
-    <ClInclude Include="src\GameSystem.h" />
-    <ClInclude Include="src\CameraComponent.h" />
-    <ClInclude Include="src\FPSActor.h" />
-    <ClInclude Include="src\Actor.h" />
-    <ClInclude Include="src\AudioComponent.h" />
-    <ClInclude Include="src\AudioSystem.h" />
-    <ClInclude Include="src\CameraActor.h" />
-    <ClInclude Include="src\CircleComponent.h" />
-    <ClInclude Include="src\Component.h" />
-    <ClInclude Include="src\Config.h" />
-    <ClInclude Include="src\Delegate.h" />
-    <ClInclude Include="src\DelegateHandle.h" />
-    <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\InputSystem.h" />
-    <ClInclude Include="src\Log.h" />
-    <ClInclude Include="src\Math.h" />
-    <ClInclude Include="src\Mesh.h" />
-    <ClInclude Include="src\MeshComponent.h" />
-    <ClInclude Include="src\MoveComponent.h" />
-    <ClInclude Include="src\OrbitCamera.h" />
-    <ClInclude Include="src\PhysicsTypes.h" />
-    <ClInclude Include="src\PhysWorld.h" />
-    <ClInclude Include="src\PlaneActor.h" />
-    <ClInclude Include="src\Random.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\ResourceManager.h" />
-    <ClInclude Include="src\Scene.h" />
-    <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\SoundEvent.h" />
-    <ClInclude Include="src\SplineActor.h" />
-    <ClInclude Include="src\SplineCamera.h" />
-    <ClInclude Include="src\SpriteComponent.h" />
-    <ClInclude Include="src\stb_image.h" />
-    <ClInclude Include="src\StructData.h" />
-    <ClInclude Include="src\Texture.h" />
-    <ClInclude Include="src\VertexArray.h" />
+    <ClInclude Include="src\actor\BallActor.h" />
+    <ClInclude Include="src\comp\BallMove.h" />
+    <ClInclude Include="src\comp\BoxComponent.h" />
+    <ClInclude Include="src\util\Collision.h" />
+    <ClInclude Include="src\actor\FollowActor.h" />
+    <ClInclude Include="src\comp\FollowCamera.h" />
+    <ClInclude Include="src\comp\FPSCamera.h" />
+    <ClInclude Include="src\sys\GameSystem.h" />
+    <ClInclude Include="src\comp\CameraComponent.h" />
+    <ClInclude Include="src\actor\FPSActor.h" />
+    <ClInclude Include="src\actor\Actor.h" />
+    <ClInclude Include="src\comp\AudioComponent.h" />
+    <ClInclude Include="src\sys\AudioSystem.h" />
+    <ClInclude Include="src\actor\CameraActor.h" />
+    <ClInclude Include="src\comp\CircleComponent.h" />
+    <ClInclude Include="src\comp\Component.h" />
+    <ClInclude Include="src\util\Config.h" />
+    <ClInclude Include="src\util\Delegate.h" />
+    <ClInclude Include="src\util\DelegateHandle.h" />
+    <ClInclude Include="src\core\Game.h" />
+    <ClInclude Include="src\sys\InputSystem.h" />
+    <ClInclude Include="src\util\Log.h" />
+    <ClInclude Include="src\util\Math.h" />
+    <ClInclude Include="src\util\Mesh.h" />
+    <ClInclude Include="src\comp\MeshComponent.h" />
+    <ClInclude Include="src\comp\MoveComponent.h" />
+    <ClInclude Include="src\comp\OrbitCamera.h" />
+    <ClInclude Include="src\util\PhysicsTypes.h" />
+    <ClInclude Include="src\sys\PhysWorld.h" />
+    <ClInclude Include="src\actor\PlaneActor.h" />
+    <ClInclude Include="src\util\Random.h" />
+    <ClInclude Include="src\sys\Renderer.h" />
+    <ClInclude Include="src\sys\ResourceManager.h" />
+    <ClInclude Include="src\sys\Scene.h" />
+    <ClInclude Include="src\util\Shader.h" />
+    <ClInclude Include="src\util\SoundEvent.h" />
+    <ClInclude Include="src\actor\SplineActor.h" />
+    <ClInclude Include="src\comp\SplineCamera.h" />
+    <ClInclude Include="src\comp\SpriteComponent.h" />
+    <ClInclude Include="src\util\StructData.h" />
+    <ClInclude Include="src\util\Texture.h" />
+    <ClInclude Include="src\util\VertexArray.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vcpkg.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

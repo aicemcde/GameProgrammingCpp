@@ -1,0 +1,14 @@
+{
+  "name": "my-game-project",
+  "version": "0.1.0",
+  "dependencies": [
+    "sdl2",
+    "glew",
+    "sdl2-ttf",
+    "sdl2-image",
+    "spdlog",
+    "nlohmann-json",
+    "entt",
+    "stb"
+  ]
+}
