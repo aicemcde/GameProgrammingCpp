@@ -3,7 +3,7 @@
 #include "../sys/PhysWorld.h"
 
 BoxComponent::BoxComponent(Actor* owner)
-	:Component(owner)
+	:ComponentBase(owner)
 	,mShouldRotate(true)
 {
 	mOwner->GetPhysWorld()->AddBox(this);

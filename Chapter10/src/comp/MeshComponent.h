@@ -3,7 +3,7 @@
 
 struct AABB;
 
-class MeshComponent : public Component
+class MeshComponent : public ComponentBase<MeshComponent>
 {
 public:
 	explicit MeshComponent(class Actor* owner);

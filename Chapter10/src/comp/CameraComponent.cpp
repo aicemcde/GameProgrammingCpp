@@ -5,7 +5,7 @@
 #include "../sys/AudioSystem.h"
 
 CameraComponent::CameraComponent(Actor* owner)
-	: Component(owner)
+	: ComponentBase(owner)
 {
 
 }

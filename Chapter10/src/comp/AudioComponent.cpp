@@ -23,7 +23,7 @@ namespace
 
 
 AudioComponent::AudioComponent(Actor* actor, int updateOrder, const Vector3& pos)
-	:Component(actor, updateOrder)
+	:ComponentBase(actor, updateOrder)
 	, mLastPos(pos)
 	,mLastVelocity(Vector3::Zero)
 {

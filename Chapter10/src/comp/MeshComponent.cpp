@@ -11,7 +11,7 @@
 #include "../util/Collision.h"
 
 MeshComponent::MeshComponent(Actor* owner)
-	:Component(owner)
+	:ComponentBase(owner)
 	, mMesh(nullptr)
 	, mTextureIndex(0)
 {

@@ -21,6 +21,7 @@ public:
 
 	std::vector<class PlaneActor*>& GetPlanes() { return mPlanes; }
 	void AddPlanes(class PlaneActor*);
+	std::vector<class PlaneActor*>& GetFloors() { return mFloors; }
 private:
 	void ProcessInput();
 	void HandleKeyPress(int key);
@@ -49,4 +50,5 @@ private:
 	class Actor* mFireSphere;
 	class MoveComponent* mSphereMoveComp;
 	std::vector<class PlaneActor*> mPlanes;
+	std::vector<class PlaneActor*> mFloors;
 };

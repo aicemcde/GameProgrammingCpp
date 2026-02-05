@@ -48,7 +48,7 @@ bool PhysWorld::SegmentCast(const LineSegment& l, Physics::CollisionInfo& outInf
 	return collided;
 }
 
-void PhysWorld::TestSweepAndPrune(std::function<void(Actor*, Actor*)> f)
+void PhysWorld::TestSweepAndPrune(std::function<void(BoxComponent*, BoxComponent*)> f)
 {
 	std::ranges::sort(mBoxes, [](BoxComponent* a, BoxComponent* b)
 		{
@@ -58,17 +58,29 @@ void PhysWorld::TestSweepAndPrune(std::function<void(Actor*, Actor*)> f)
 	for (size_t i = 0; i < mBoxes.size(); ++i)
 	{
 		BoxComponent* a = mBoxes[i];
-		float max = a->GetWorldBox().mMax.x;
+		const auto& aBox = a->GetWorldBox();
 		for (size_t j = i + 1; j < mBoxes.size(); j++)
 		{
 			BoxComponent* b = mBoxes[j];
-			if (b->GetWorldBox().mMin.x < max)
+			const auto& bBox = b->GetWorldBox();
+			if (bBox.mMin.x > aBox.mMax.x)
 			{
 				break;
 			}
-			else if (Collision::Intersect(a->GetWorldBox(), b->GetWorldBox()))
+
+			if (bBox.mMin.y > aBox.mMax.y)
 			{
-				f(a->GetOwner(), b->GetOwner());
+				continue;
+			}
+
+			if (bBox.mMin.z > aBox.mMax.z)
+			{
+				continue;
+			}
+
+			if (Collision::Intersect(a->GetWorldBox(), b->GetWorldBox()))
+			{
+				f(a, b);
 			}
 		}
 	}

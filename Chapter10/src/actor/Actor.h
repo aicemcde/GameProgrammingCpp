@@ -5,8 +5,10 @@
 #include <algorithm>
 #include "../comp/Component.h"
 #include "../util/Math.h"
+#include <unordered_map>
+#include <string>
 
-inline constexpr auto MAX_MOUSE_SPEED = 500;
+inline constexpr auto MAX_MOUSE_SPEED = 500.0f;
 inline constexpr auto MAX_MOVE_SPEED = 300.0f;
 inline constexpr auto MAX_ANGULAR_SPEED = 3.1415926535f * 8.0f;
 
@@ -29,21 +31,38 @@ public:
 	void AddComponent(Args&&... args)
 	{
 		auto newComponent = std::make_unique<T>(this, std::forward<Args>(args)...);
+		mComponentIDMap.emplace(newComponent->GetComponentID(), newComponent.get());
 		int myOrder = newComponent->GetUpdateOrder();
 		auto iter = std::ranges::lower_bound(mComponents, myOrder, {}, &Component::GetUpdateOrder);
 		mComponents.insert(iter, std::move(newComponent));
 	}
-
 	template<typename T, typename... Args>
+
 		requires std::derived_from<T, class Component>
 	T* AddComponent_Pointer(Args&&... args)
 	{
 		auto newComponent = std::make_unique<T>(this, std::forward<Args>(args)...);
 		T* ptr = newComponent.get();
+		mComponentIDMap.emplace(ptr->GetComponentID(), ptr);
 		int myOrder = newComponent->GetUpdateOrder();
 		auto iter = std::ranges::lower_bound(mComponents, myOrder, {}, &Component::GetUpdateOrder);
 		mComponents.insert(iter, std::move(newComponent));
 		return ptr;
+	}
+
+	template<typename T>
+	T* GetComponent()
+	{
+		ComponentID id = T::StaticComponentID();
+		auto it = mComponentIDMap.find(id);
+		if (it != mComponentIDMap.end())
+		{
+			return static_cast<T*>(it->second);
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	Actor(GameContext* context);
@@ -80,6 +99,7 @@ public:
 	class Scene* GetScene() noexcept;
 	class ResourceManager* GetResourceManager() noexcept;
 	class PhysWorld* GetPhysWorld() noexcept;
+	class InputSystem* GetInputSystem() noexcept;
 	GameContext* GetContext() noexcept;
 protected:
 	GameContext* mGameContext;
@@ -98,6 +118,6 @@ private:
 	float mScale = 1.0f;
 	Quaternion mRotation;
 	Vector3 mPosition;
-
 	
+	std::unordered_map<ComponentID, class Component*> mComponentIDMap;
 };

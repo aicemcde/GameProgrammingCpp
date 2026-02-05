@@ -2,7 +2,7 @@
 #include "Component.h"
 #include "../util/Math.h"
 
-class CircleComponent : public Component
+class CircleComponent : public ComponentBase<CircleComponent>
 {
 public:
 	CircleComponent(class Actor* owner);

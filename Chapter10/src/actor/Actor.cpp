@@ -1,6 +1,7 @@
 #include "Actor.h"
 #include "../util/Math.h"
 #include "../sys/GameSystem.h"
+#include "../util/Log.h"
 
 
 Actor::Actor(GameContext* context)
@@ -87,6 +88,11 @@ ResourceManager* Actor::GetResourceManager() noexcept
 PhysWorld* Actor::GetPhysWorld() noexcept
 {
 	return mGameContext->physWorld;
+}
+
+InputSystem* Actor::GetInputSystem() noexcept
+{
+	return mGameContext->input;
 }
 
 GameContext* Actor::GetContext() noexcept

@@ -4,11 +4,11 @@
 
 class SoundEvent;
 
-class AudioComponent : public Component
+class AudioComponent : public ComponentBase<AudioComponent>
 {
 public:
-	AudioComponent(class Actor* owner, int updateOrder = 200, const Vector3& pos = Vector3::Zero);
-	~AudioComponent();
+	explicit AudioComponent(class Actor* owner, int updateOrder = 200, const Vector3& pos = Vector3::Zero);
+	~AudioComponent() override;
 
 	void Update(float deltaTime) override;
 	void OnUpdateWorldTransform(float deltaTime) override;

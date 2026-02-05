@@ -1,11 +1,10 @@
 #pragma once
 #include "Component.h"
 
-class CameraComponent : public Component
+class CameraComponent : public ComponentBase<CameraComponent>
 {
 public:
-	CameraComponent(class Actor* owner);
-	virtual ~CameraComponent() = default;
+	explicit CameraComponent(class Actor* owner);
 
 	void Update(float deltaTime) override;
 	void ProcessInput(const InputState& state) override {};

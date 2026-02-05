@@ -3,7 +3,7 @@
 
 class Texture;
 
-class SpriteComponent : public Component
+class SpriteComponent : public ComponentBase<SpriteComponent>
 {
 public:
 	SpriteComponent(class Actor* owner, int updateOrder = 20);

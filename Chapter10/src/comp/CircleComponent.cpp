@@ -2,7 +2,7 @@
 #include "../actor/Actor.h"
 
 CircleComponent::CircleComponent(Actor* owner)
-	:Component(owner)
+	:ComponentBase(owner)
 	, mRadius(0.0f)
 {
 

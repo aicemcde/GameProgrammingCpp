@@ -5,18 +5,19 @@
 #include <functional>
 
 struct GameContext;
+class BoxComponent;
 
 class PhysWorld
 {
 public:
-	PhysWorld(GameContext* context);
+	explicit PhysWorld(GameContext* context);
 	~PhysWorld();
 
 	void AddBox(class BoxComponent* box);
 	void RemoveBox(class BoxComponent* box);
 
 	bool SegmentCast(const LineSegment& l, Physics::CollisionInfo& outInfo);
-	void TestSweepAndPrune(std::function<void(Actor*, Actor*)> f);
+	void TestSweepAndPrune(std::function<void(BoxComponent*, BoxComponent*)> f);
 private:
 	GameContext* mContext;
 	std::vector<class BoxComponent*> mBoxes;

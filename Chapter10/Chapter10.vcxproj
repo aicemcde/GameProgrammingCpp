@@ -143,6 +143,8 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\actor\BallActor.cpp" />
     <ClCompile Include="src\comp\BallMove.cpp" />
     <ClCompile Include="src\comp\BoxComponent.cpp" />
+    <ClCompile Include="src\comp\StateComponent.cpp" />
+    <ClCompile Include="src\core\Factory.cpp" />
     <ClCompile Include="src\util\Collision.cpp" />
     <ClCompile Include="src\comp\OrbitCamera.cpp" />
     <ClCompile Include="src\actor\FollowActor.cpp" />
@@ -176,6 +178,9 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClCompile Include="src\actor\SplineActor.cpp" />
     <ClCompile Include="src\comp\SplineCamera.cpp" />
     <ClCompile Include="src\comp\SpriteComponent.cpp" />
+    <ClCompile Include="src\util\state\Falling.cpp" />
+    <ClCompile Include="src\util\state\Ground.cpp" />
+    <ClCompile Include="src\util\state\Jump.cpp" />
     <ClCompile Include="src\util\StructData.cpp" />
     <ClCompile Include="src\util\Texture.cpp" />
     <ClCompile Include="src\util\VertexArray.cpp" />
@@ -184,6 +189,9 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClInclude Include="src\actor\BallActor.h" />
     <ClInclude Include="src\comp\BallMove.h" />
     <ClInclude Include="src\comp\BoxComponent.h" />
+    <ClInclude Include="src\comp\StateComponent.h" />
+    <ClInclude Include="src\core\Constants.h" />
+    <ClInclude Include="src\core\Factory.h" />
     <ClInclude Include="src\util\Collision.h" />
     <ClInclude Include="src\actor\FollowActor.h" />
     <ClInclude Include="src\comp\FollowCamera.h" />
@@ -220,6 +228,10 @@ xcopy /y /d "C:\Program Files (x86)\FMOD SoundSystem\FMOD Studio API Windows\api
     <ClInclude Include="src\actor\SplineActor.h" />
     <ClInclude Include="src\comp\SplineCamera.h" />
     <ClInclude Include="src\comp\SpriteComponent.h" />
+    <ClInclude Include="src\util\state\Falling.h" />
+    <ClInclude Include="src\util\state\Ground.h" />
+    <ClInclude Include="src\util\state\Jump.h" />
+    <ClInclude Include="src\util\state\State.h" />
     <ClInclude Include="src\util\StructData.h" />
     <ClInclude Include="src\util\Texture.h" />
     <ClInclude Include="src\util\VertexArray.h" />

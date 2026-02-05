@@ -3,7 +3,7 @@
 #include "../actor/Actor.h"
 
 MoveComponent::MoveComponent(Actor* owner, int updateOrder)
-	:Component(owner, updateOrder)
+	:ComponentBase(owner, updateOrder)
 	, mAngularSpeed(0.0f)
 	, mForwardSpeed(0.0f)
 	, mStrafeSpeed(0.0f)
@@ -26,6 +26,12 @@ void MoveComponent::Update(float deltaTime)
 		Vector3 pos = mOwner->GetPosition();
 		pos += mOwner->GetForward() * mForwardSpeed * deltaTime;
 		pos += mOwner->GetRight() * mStrafeSpeed * deltaTime;
+		mOwner->SetPosition(pos);
+	}
+	if (!Math::NearZero(mUpSpeed))
+	{
+		Vector3 pos = mOwner->GetPosition();
+		pos += Vector3::UnitZ * mUpSpeed * deltaTime;
 		mOwner->SetPosition(pos);
 	}
 }

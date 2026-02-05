@@ -9,7 +9,7 @@
 #include "../sys/GameSystem.h"
 
 SpriteComponent::SpriteComponent(Actor* owner, int updateOrder)
-	:Component(owner, updateOrder)
+	:ComponentBase(owner, updateOrder)
 	, mTexHeight(0)
 	, mTexWidth(0)
 	, mTexture(nullptr)

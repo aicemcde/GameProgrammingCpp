@@ -98,6 +98,7 @@ public:
 
 	const InputState& GetState() const { return mState; }
 	const ControllerState& GetControllerState(int playerIndex) const;
+	const auto& GetActionMap() const { return mActionMap; }
 	
 	void SetRelativeMouseMode(bool value);
 

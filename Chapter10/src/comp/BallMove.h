@@ -5,7 +5,7 @@ class BallMove : public MoveComponent
 {
 public:
 	explicit BallMove(class Actor* owner);
-	~BallMove() = default;
+	~BallMove() override = default;
 
 	void Update(float deltaTime) override;
 	void SetPlayer(class Actor* player) { mPlayer = player; }

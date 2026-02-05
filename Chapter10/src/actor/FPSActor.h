@@ -1,5 +1,6 @@
 #pragma once
 #include "Actor.h"
+#include <unordered_map>
 
 class FPSActor : public Actor
 {
@@ -11,6 +12,8 @@ public:
 	void ActorInput(const InputState& state) override;
 	
 	void Shoot();
+
+
 private:
 	void FixCollisions(float deltaTime);
 
@@ -21,4 +24,7 @@ private:
 	class MeshComponent* mMeshForFPSModel;
 	class SpriteComponent* mCrosshair;
 	class BoxComponent* mBoxComp;
+	class StateComponent* mStateComp;
+
+	float mCurrModelPosZ = 0.0f;
 };

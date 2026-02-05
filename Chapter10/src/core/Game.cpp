@@ -22,6 +22,7 @@
 #include "../sys/GameSystem.h"
 #include "../actor/FollowActor.h"
 #include "../actor/SplineActor.h"
+#include "../comp/BoxComponent.h"
 
 Game::Game()
 	:mIsRunning(true)
@@ -217,12 +218,16 @@ void Game::LoadData()
 	a->SetRotation(q);
 	MeshComponent* mc = a->AddComponent_Pointer<MeshComponent>();
 	mc->SetMesh(mGameSystem->resource->GetMesh("Assets/Cube.gpmesh"));
+	BoxComponent* box = a->AddComponent_Pointer<BoxComponent>();
+	box->SetObjectBox(mc->GetBox());
 
 	a = mGameSystem->scene->CreateActor<Actor>();
 	a->SetPosition(Vector3(200.0f, -75.0f, 0.0f));
 	a->SetScale(3.0f);
 	mc = a->AddComponent_Pointer<MeshComponent>();
 	mc->SetMesh(mGameSystem->resource->GetMesh("Assets/Sphere.gpmesh"));
+	box = a->AddComponent_Pointer<BoxComponent>();
+	box->SetObjectBox(mc->GetBox());
 
 	//Floor
 	const float start = -1250.0f;
@@ -233,6 +238,7 @@ void Game::LoadData()
 		{
 			a = mGameSystem->scene->CreateActor<PlaneActor>();
 			a->SetPosition(Vector3(start + i * size, start + j * size, -100.0f));
+			mFloors.emplace_back(static_cast<PlaneActor*>(a));
 		}
 	}
 
@@ -268,7 +274,6 @@ void Game::LoadData()
 	dir.mSpecColor = Vector3(0.8f, 0.8f, 0.8f);
 
 	//Camera
-	//mCameraActor = mScene->CreateActor<CameraActor>(this);
 	mCameraActor = mGameSystem->scene->CreateActor<FPSActor>();
 
 	//UI
@@ -294,6 +299,8 @@ void Game::LoadData()
 	ac->PlayEvent("event:/FireLoop", mGameSystem->context.get());
 	mSphereMoveComp = a->AddComponent_Pointer<MoveComponent>();
 	mSphereMoveComp->SetForwardSpeed(0.0f);
+	box = a->AddComponent_Pointer<BoxComponent>();
+	box->SetObjectBox(mc->GetBox());
 
 	//start music
 	mMusicEvent = mGameSystem->audio->PlayEvent("event:/Music");

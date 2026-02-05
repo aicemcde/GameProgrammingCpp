@@ -386,7 +386,7 @@ ButtonState InputSystem::GetMappedButtonState(const std::string& actionName)
 		{
 		case InputDeviceType::Keyboard:
 		{
-			SDL_Scancode key = static_cast<SDL_Scancode>(action.code);
+			auto key = static_cast<SDL_Scancode>(action.code);
 			return mState.Keyboard.GetKeyState(key);
 		}
 		case InputDeviceType::Mouse:
@@ -396,7 +396,7 @@ ButtonState InputSystem::GetMappedButtonState(const std::string& actionName)
 		}
 		case InputDeviceType::Controller:
 		{
-			SDL_GameControllerButton button = static_cast<SDL_GameControllerButton>(action.code);
+			auto button = static_cast<SDL_GameControllerButton>(action.code);
 			int idx = action.playerIndex;
 
 			if (0 < idx && idx  < MAX_ACTIVE_PLAYER)
