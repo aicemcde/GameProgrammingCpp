@@ -50,11 +50,22 @@ struct AABB
 	float MinDistSq(const Vector3& point) const;
 };
 
+struct Transform
+{
+	Vector3 position;
+	Quaternion rotation;
+	float scale;
+};
+
 struct OBB
 {
 	Vector3 mCenter;
 	Quaternion mRotation;
 	Vector3 mExtents;
+
+	OBB();
+	OBB CreateWorldOBB(const Transform& objTransform, const AABB& localAABB);
+	bool Contains(const Vector3& point);
 };
 
 struct Capsule
@@ -81,11 +92,13 @@ namespace Collision
 	bool Intersect(const LineSegment& l, const Sphere& s, float& outT);
 	bool Intersect(const LineSegment& l, const AABB& b, float& outT);
 	bool Intersect(const LineSegment& l, const AABB& b, float& outT, Vector3& outNorm);
+	bool Intersect(const OBB& a, const OBB& b);
 	bool SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float& outT);
 	
 	namespace Healper
 	{
 		bool TestSidePlane(float start, float end, float negd, Planes& out);
 		bool TestSidePlane(float start, float end, float negd, const Vector3& norm, NormPlanes& out);
+		float GetProjectionRadius(const Vector3& axis, const std::vector<Vector3> directions, const Vector3& axis);
 	}
 }

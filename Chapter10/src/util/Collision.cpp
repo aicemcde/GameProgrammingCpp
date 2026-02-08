@@ -149,6 +149,45 @@ bool AABB::Contains(const Vector3& point) const
 	return !outSide;
 }
 
+OBB::OBB()
+{
+	mCenter = Vector3::Zero;
+	mRotation = Quaternion::Identity;
+	mExtents = Vector3::Zero;
+}
+
+OBB OBB::CreateWorldOBB(const Transform& objTransform, const AABB& localAABB)
+{
+	OBB outOBB;
+
+	outOBB.mRotation = objTransform.rotation;
+
+	Vector3 extent = (localAABB.mMax - localAABB.mMin) * 0.5f;
+	outOBB.mExtents = extent * objTransform.scale;
+
+	Vector3	localCenter = (localAABB.mMax + localAABB.mMin) * 0.5f;
+
+	Vector3 rotatedOffset = Vector3::Transform(localCenter * objTransform.scale, objTransform.rotation);
+	outOBB.mCenter = objTransform.position + rotatedOffset;
+
+	return outOBB;
+}
+
+bool OBB::Contains(const Vector3& point)
+{
+	Vector3 dir = point - mCenter;
+	Quaternion invRot = Quaternion::Conjugate(mRotation);
+	Vector3 localPoint = Vector3::Transform(dir, invRot);
+
+	bool outSide = Math::Abs(localPoint.x) <= mExtents.x &&
+		Math::Abs(localPoint.y) <= mExtents.y &&
+		Math::Abs(localPoint.z) <= mExtents.z;
+
+	return !outSide;
+}
+
+
+
 bool Capsule::Contains(const Vector3& point) const
 {
 	float distSq = mSegment.MinDistSq(point);
@@ -324,7 +363,27 @@ bool Collision::Intersect(const LineSegment& l, const AABB& b, float& outT, Vect
 	return false;
 }
 
-bool Collision::SweptSphere(const Sphere& P0, const Sphere& P1, const Sphere& Q0, const Sphere& Q1, float& outT)
+
+
+bool Collision::Intersect(const OBB& a, const OBB& b)
+{
+	std::vector<Vector3> axisA(3), axisB(3);
+
+	axisA[0] = Vector3::Transform(Vector3::UnitX, a.mRotation);
+	axisA[1] = Vector3::Transform(Vector3::UnitY, a.mRotation);
+	axisA[2] = Vector3::Transform(Vector3::UnitZ, a.mRotation);
+	axisB[0] = Vector3::Transform(Vector3::UnitX, a.mRotation);
+	axisB[1] = Vector3::Transform(Vector3::UnitY, a.mRotation);
+	axisB[2] = Vector3::Transform(Vector3::UnitZ, a.mRotation);
+	Vector3 interval = a.mCenter - b.mCenter;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		float rA = a.mExtents[i];
+	}
+}
+
+bool Collision::SweptSphere(const Sphere& P0, const Sphere& Q0, const Sphere& P1, const Sphere& Q1, float& outT)
 {
 	Vector3 X = P0.mCenter - Q0.mCenter;
 	Vector3 Y = (P1.mCenter - P0.mCenter) - (Q1.mCenter - Q0.mCenter);
@@ -398,4 +457,11 @@ bool Collision::Healper::TestSidePlane(float start, float end, float negd, const
 			return false;
 		}
 	}
+}
+
+float Collision::Healper::GetProjectionRadius(const Vector3& axis, const std::vector<Vector3> directions, const Vector3& extents)
+{
+	return extents.x * Math::Abs(Vector3::Dot(axis, directions[0])) +
+		extents.y * Math::Abs(Vector3::Dot(axis, directions[1])) +
+		extents.z * Math::Abs(Vector3::Dot(axis, directions[2]));
 }

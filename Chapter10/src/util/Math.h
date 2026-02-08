@@ -900,12 +900,15 @@ public:
 		w = inW;
 	}
 
-	void Conjugate()
+	static Quaternion Conjugate(const Quaternion& q)
 	{
-		x *= -1.0f;
-		y *= -1.0f;
-		z *= -1.0f;
+		Quaternion invRot = q;
+		invRot.x *= -1.0f;
+		invRot.y *= -1.0f;
+		invRot.z *= -1.0f;
+		return invRot;
 	}
+
 
 	float LengthSq() const
 	{
