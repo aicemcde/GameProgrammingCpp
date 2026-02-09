@@ -47,6 +47,12 @@ bool Game::Initialize(GameConfig& config)
 		return false;
 	}
 
+	sdlResult = TTF_Init();
+	if (sdlResult != 0)
+	{
+		LOG_CRITICAL("TTF could not initialize! SDL_Error : {}", SDL_GetError());
+	}
+
 	mGameSystem = std::make_unique<GameSystem>(this);
 	
 

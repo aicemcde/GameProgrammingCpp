@@ -1,0 +1,118 @@
+﻿#include "AudioComponent.h"
+#include "../sys/AudioSystem.h"
+#include "../actor/Actor.h"
+#include "../sys/GameSystem.h"
+#include "../util/SoundEvent.h"
+
+namespace
+{
+	Vector3 CalVelocity(const Vector3& current, const Vector3& last, float deltaTime)
+	{
+		Vector3 result;
+		result.x = (current.x - last.x) / deltaTime;
+		result.y = (current.y - last.y) / deltaTime;
+		result.z = (current.z - last.z) / deltaTime;
+		return result;
+	}
+
+	Vector3 LerpVector3(const Vector3& a, const Vector3& b, float f)
+	{
+		return a + f * (b - a);
+	}
+}
+
+
+AudioComponent::AudioComponent(Actor* actor, int updateOrder, const Vector3& pos)
+	:ComponentBase(actor, updateOrder)
+	, mLastPos(pos)
+	,mLastVelocity(Vector3::Zero)
+{
+
+}
+
+AudioComponent::~AudioComponent()
+{
+	StopAllEvent();
+}
+
+void AudioComponent::Update(float deltaTime)
+{
+	Component::Update(deltaTime);
+
+	std::erase_if(mEvent2D, [](const SoundEvent& e)
+		{
+			return !e.IsValid();
+		}
+	);
+
+	std::erase_if(mEvent3D, [](const SoundEvent& e)
+		{
+			return !e.IsValid();
+		}
+	);
+}
+
+void AudioComponent::OnUpdateWorldTransform(float deltaTime)
+{
+	Matrix4 world = mOwner->GetWorldTransform();
+	Vector3 currentPos = world.GetTranslation();
+	if (deltaTime > 0)
+	{
+		Vector3 rawVelocity;
+		rawVelocity = CalVelocity(currentPos, mLastPos, deltaTime);
+		//ノイズ軽減のため、線形補間
+		/*
+		ノイズ（ジッター）の軽減
+		フレームレートが不安定な場合や、物理エンジンの座標更新と描画更新のタイミングのズレにより、計算される速度が毎フレーム激しく振動することがあります。音が「ビリビリ」震えて聞こえる原因になります。
+
+		対策: 厳密な精度が不要なら、前回の速度とブレンドして滑らかにする（スムージング）のが一般的です。
+
+		C++
+
+		簡易的なローパスフィルタ（スムージング）
+		Vector3 rawVelocity = CalVelocity(currentPos, mLastPos, deltaTime);
+		 前回の速度を90%、今回の計算値を10%混ぜるなど
+		velocity = Lerp(velocity, rawVelocity, 0.1f);
+		*/
+		mLastVelocity = LerpVector3(mLastVelocity, rawVelocity, 0.1f);
+	}
+
+	for (auto& event : mEvent3D)
+	{
+		if (event.IsValid())
+		{
+			event.Set3DAttributes(world, mLastVelocity);
+		}
+	}
+
+	mLastPos = currentPos;
+}
+
+SoundEvent AudioComponent::PlayEvent(const std::string& name, GameContext* context)
+{
+	SoundEvent e = context->audio->PlayEvent(name);
+	if (e.Is3D())
+	{
+		mEvent3D.emplace_back(e);
+		e.Set3DAttributes(mOwner->GetWorldTransform(), Vector3(0, 0, 0));
+	}
+	else
+	{
+		mEvent2D.emplace_back(e);
+	}
+	return e;
+}
+
+void AudioComponent::StopAllEvent()
+{
+	for (auto& event : mEvent2D)
+	{
+		event.Stop();
+	}
+	for (auto& event : mEvent3D)
+	{
+		event.Stop();
+	}
+	mEvent2D.clear();
+	mEvent3D.clear();
+}
