@@ -377,10 +377,7 @@ bool Collision::Intersect(const OBB& a, const OBB& b)
 	axisB[2] = Vector3::Transform(Vector3::UnitZ, a.mRotation);
 	Vector3 interval = a.mCenter - b.mCenter;
 
-	for (int i = 0; i < 3; ++i)
-	{
-		float rA = a.mExtents[i];
-	}
+	return false;
 }
 
 bool Collision::SweptSphere(const Sphere& P0, const Sphere& Q0, const Sphere& P1, const Sphere& Q1, float& outT)

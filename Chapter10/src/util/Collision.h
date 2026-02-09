@@ -99,6 +99,6 @@ namespace Collision
 	{
 		bool TestSidePlane(float start, float end, float negd, Planes& out);
 		bool TestSidePlane(float start, float end, float negd, const Vector3& norm, NormPlanes& out);
-		float GetProjectionRadius(const Vector3& axis, const std::vector<Vector3> directions, const Vector3& axis);
+		float GetProjectionRadius(const Vector3& axis, const std::vector<Vector3> directions, const Vector3& extents);
 	}
 }
